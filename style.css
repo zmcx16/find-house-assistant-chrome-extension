@@ -1,3 +1,8 @@
 #house-hidden-show-all{
     color: green !important;
 }
+
+#house-hidden-ext-panel{
+    width: 980px;
+    margin: 0 auto;
+}
