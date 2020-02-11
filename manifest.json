@@ -27,10 +27,15 @@
     "houseprice.js",
     "style.css"
   ],
+  "externally_connectable": {
+    "matches": [
+      "*://buy.houseprice.tw/*"
+    ]
+  },
   "content_scripts": [
     {
       "matches": [
-        "https://buy.houseprice.tw/*"
+        "*://buy.houseprice.tw/*"
       ],
       "css": [
         "style.css"
