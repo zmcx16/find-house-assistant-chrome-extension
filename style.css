@@ -6,3 +6,9 @@
     width: 980px;
     margin: 0 auto;
 }
+
+.buy_houseprice_tw-hidden-btn{
+    left: 0px;
+    top: 30px;
+    position: absolute;
+}
