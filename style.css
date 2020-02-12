@@ -1,13 +1,13 @@
-#house-hidden-show-all{
+#show-all-btn{
     color: green !important;
 }
 
-#house-hidden-ext-panel{
+#ext-panel{
     width: 980px;
     margin: 0 auto;
 }
 
-.buy_houseprice_tw-hidden-btn{
+.hidden-btn{
     left: 0px;
     top: 30px;
     position: absolute;

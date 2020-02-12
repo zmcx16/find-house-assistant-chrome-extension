@@ -23,7 +23,6 @@
     "storage"
   ],
   "web_accessible_resources": [
-    "jquery.min.js",
     "houseprice.js",
     "style.css"
   ],
@@ -41,6 +40,7 @@
         "style.css"
       ],
       "js": [
+        "jquery.min.js",
         "execute.js"
       ],
       "run_at": "document_end"
