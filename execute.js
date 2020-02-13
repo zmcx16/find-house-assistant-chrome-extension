@@ -111,8 +111,8 @@ function hiddenAll() {
 function addHiddenBtn() {
   var data = $(".object_con_box.list_con")[0].children;
   for (var j = 0; j < data.length; j++) {
-    var tgt_element = data[j].lastElementChild;
-    if (tgt_element.innerHTML.indexOf('<button class="hidden-btn"') === -1 && tgt_element.innerHTML.indexOf('price_wrap') != -1)
+    var tgt_element = data[j].children[1];
+    if (tgt_element != null && tgt_element.innerHTML.indexOf('<button class="hidden-btn"') === -1 && tgt_element.innerHTML.indexOf('title_list') != -1)
       tgt_element.innerHTML = '<button class="hidden-btn" type="button">Hidden</button>' + tgt_element.innerHTML;
   }
 
@@ -125,13 +125,17 @@ function addHiddenBtn() {
 window.onload = function () {
 
   // add extend panel
-  if ($(".search_box_wrap")[0].innerHTML.indexOf("ext-panel") === -1) {
+  if ($("#vue-container")[0].innerHTML.indexOf("ext-panel") === -1) {
+    var ext_panel = '<div id="ext-panel">' +
+                    '  <div id="ext-panel-title">Extend Panel</div>' + 
+                    '  <button id="show-all-btn" type="button">Show All</button>' +
+                    '  <button id="hidden-all-btn" type="button">Hidden All</button>' +
+                    '  <a href="#hidden-detail" id="hidden-detail-btn">Show</a>' +
+                    '  <span class="filter-address">去除地址關鍵字:</span><input type="text" id="filter-address-input" placeholder=" OO路;XX巷" name="filter-address-input">' +
+                    '  <div id="hidden-detail">xxx</div>'+
+                    '</div>';
 
-    $(".search_box_wrap")[0].innerHTML +=
-      '<div id="ext-panel">' +
-      '  <button id="show-all-btn" type="button">Show All</button>' +
-      '  <button id="hidden-all-btn" type="button">Hidden All</button>' +
-      '</div>';
+    $('.search_box_wrap').after(ext_panel);
 
     // add show-all & hidden-all
     $('#show-all-btn').click(function () {

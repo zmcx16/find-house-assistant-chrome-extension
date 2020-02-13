@@ -1,14 +1,52 @@
+a{
+    color: #003399 !important;
+}
+
 #show-all-btn{
     color: green !important;
+    margin-right: 20px;
+}
+
+#hidden-all-btn{
+    color: green !important;
+    margin-right: 20px;
+}
+
+#hidden-detail-btn{
+    margin-right: 100px;
+}
+
+.filter-address{
+    margin-right: 10px;
 }
 
 #ext-panel{
     width: 980px;
     margin: 0 auto;
+    margin-bottom: 20px;
 }
 
 .hidden-btn{
-    left: 0px;
-    top: 30px;
+    width: fit-content;
     position: absolute;
+    left: 850px;
+    z-index: 10;
+}
+
+#ext-panel{
+    border: 2px groove #ddd;
+    padding: 10px 10px;
+    background-color: floralwhite;
+    border-radius: 5px;
+}
+
+#ext-panel-title{
+    font-size: initial;
+    padding-bottom: 10px;
+}
+
+#hidden-detail{
+    border: 1px groove #ddd;
+    margin: 10px 0px;
+    padding: 10px;
 }
