@@ -1,7 +1,3 @@
-a{
-    color: #003399 !important;
-}
-
 #show-all-btn{
     color: green !important;
     margin-right: 20px;
@@ -12,8 +8,9 @@ a{
     margin-right: 20px;
 }
 
-#hidden-detail-btn{
+#show-detail-btn{
     margin-right: 100px;
+    color: #003399 !important;
 }
 
 .filter-address{
@@ -26,11 +23,15 @@ a{
     margin-bottom: 20px;
 }
 
+.show-btn{
+    width: fit-content;
+}
+
 .hidden-btn{
     width: fit-content;
     position: absolute;
-    left: 850px;
     z-index: 10;
+    right: -80px;
 }
 
 #ext-panel{
@@ -49,4 +50,11 @@ a{
     border: 1px groove #ddd;
     margin: 10px 0px;
     padding: 10px;
+}
+
+.show-item{
+    display: grid;
+    grid-template-columns: 70px 32% 50% 15%;
+    margin-bottom: 5px;
+    line-height: initial;
 }
