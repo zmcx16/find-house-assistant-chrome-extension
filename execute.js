@@ -82,10 +82,22 @@ function initWithDom(){
     addHiddenShowBtn(); // prevent observer not detect
     $("body").on('DOMSubtreeModified', ".object_con_box.list_con", function () {
       addHiddenShowBtn();
-      setShowHiddenUI();
     });
 
+    // reset Extend Panel
+    $('.pagger_box li').click(function () {
+      resetExtendPanel(); 
+    });
+
+    $('.pagger_box a').click(function () {
+      resetExtendPanel();
+    });
   }
+}
+
+function resetExtendPanel(){
+
+  $('#hidden-detail')[0].innerHTML = "";
 }
 
 // local function 
@@ -139,7 +151,10 @@ function setShowHiddenUI() {
     var tgt_obj = $('a[href$="' + tgt_url + '"]');
     if (tgt_obj){
       var tgt_div = tgt_obj.parent().parent().parent()[0];
-      if (storage_data['show_hidden'][key].display){
+      if (!tgt_div || !tgt_div || !$('#show-' + key)[0]){
+        // do nothing
+      }
+      else if (storage_data['show_hidden'][key].display){
         tgt_div.style.display = 'flex';
         $('#show-' + key)[0].style.display = 'none';
       }
@@ -177,6 +192,7 @@ function hiddenAll() {
 }
 
 function addHiddenShowBtn() {
+
   var data = $(".object_con_box.list_con")[0].children;
   for (var j = 0; j < data.length; j++) {
     var tgt_element = data[j].children[1];
@@ -196,6 +212,8 @@ function addHiddenShowBtn() {
 
     }
   }
+
+  setShowHiddenUI();
 
   $('.hidden-btn').unbind("click");
   $('.hidden-btn').click(function () {
