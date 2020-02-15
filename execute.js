@@ -25,12 +25,16 @@ chrome.runtime.sendMessage({ "message": "activate_icon" });
 function init() {
 
   chrome.storage.local.get("data", function (stor_data) {
-    if (stor_data) {
-      console.log(stor_data)
-      storage_data = stor_data;
-    }
-    console.log("load completed, do initWithDom");
+
     initWithDom();
+
+    if (Object.keys(stor_data).length > 0) {
+      console.log(stor_data)
+      storage_data = {...stor_data["data"]};
+    }
+
+    setShowHiddenUI();
+
     console.log("init completed.");
   });
 }
@@ -78,6 +82,7 @@ function initWithDom(){
     addHiddenShowBtn(); // prevent observer not detect
     $("body").on('DOMSubtreeModified', ".object_con_box.list_con", function () {
       addHiddenShowBtn();
+      setShowHiddenUI();
     });
 
   }
@@ -86,7 +91,7 @@ function initWithDom(){
 // local function 
 function saveStorage() {
 
-  chrome.storage.local.set({ "data": stor_data }, function () {
+  chrome.storage.local.set({ "data": storage_data }, function () {
     console.log("save completed");
   });
 }
@@ -119,29 +124,29 @@ function getShowHiddenIDList(data) {
 
 function setShowHiddenTargets(data_list, val) {
 
-  var show_hidden_dict = {};
   for (var i = 0; i < data_list.length; i++) {
-    show_hidden_dict[data_list[i]] = {
+    storage_data['show_hidden'][data_list[i]] = {
       display: val,
       last_time: new Date().toLocaleString()
     };
   }
-
-  return show_hidden_dict;
 }
 
-function setShowHiddenUI(show_hidden_dict, val) {
+function setShowHiddenUI() {
 
-  Object.keys(show_hidden_dict).forEach(function (key) {
+  Object.keys(storage_data['show_hidden']).forEach(function (key) {
     var tgt_url = "https://buy.houseprice.tw/house/" + key;
-    var tgt_div = $('a[href$="' + tgt_url + '"]').parent().parent().parent()[0];
-    if (val){
-      tgt_div.style.display = 'flex';
-      $('#show-' + key)[0].style.display = 'none';
-    }
-    else{
-      tgt_div.style.display = 'none';
-      $('#show-' + key)[0].style.display = 'grid';
+    var tgt_obj = $('a[href$="' + tgt_url + '"]');
+    if (tgt_obj){
+      var tgt_div = tgt_obj.parent().parent().parent()[0];
+      if (storage_data['show_hidden'][key].display){
+        tgt_div.style.display = 'flex';
+        $('#show-' + key)[0].style.display = 'none';
+      }
+      else{
+        tgt_div.style.display = 'none';
+        $('#show-' + key)[0].style.display = 'grid';
+      }
     }
   });
 
@@ -149,9 +154,9 @@ function setShowHiddenUI(show_hidden_dict, val) {
 
 function doShow(data) {
 
-  var show_hidden_dict = setShowHiddenTargets(getShowHiddenIDList(data), true);
-  console.log(show_hidden_dict);
-  setShowHiddenUI(show_hidden_dict, true);
+  setShowHiddenTargets(getShowHiddenIDList(data), true);
+  setShowHiddenUI();
+  saveStorage();
 }
 
 function showAll() {
@@ -161,9 +166,9 @@ function showAll() {
 
 function doHidden(data) {
 
-  var show_hidden_dict = setShowHiddenTargets(getShowHiddenIDList(data), false);
-  console.log(show_hidden_dict);
-  setShowHiddenUI(show_hidden_dict, false);
+  setShowHiddenTargets(getShowHiddenIDList(data), false);
+  setShowHiddenUI();
+  saveStorage();
 }
 
 function hiddenAll() {
@@ -178,12 +183,12 @@ function addHiddenShowBtn() {
     if (tgt_element != null && tgt_element.innerHTML.indexOf('<button class="hidden-btn"') === -1 && tgt_element.innerHTML.indexOf('title_list') != -1){
       
       // show button
-      var obj_desc1 = data[j].children[1].children[0].children[0].innerText;
-      console.log(data[j].children[1].children[1]);
-      var obj_desc2 = data[j].children[1].children[1].children[1].innerText;
-      var obj_desc3 = data[j].children[2].children[1].innerText
+      var obj_desc1, obj_desc2, obj_desc3;
+      try { obj_desc1 = data[j].children[1].children[0].children[0].innerText; } catch (e) { console.log(e); };
+      try { obj_desc2 = data[j].children[1].children[1].children[1].innerText; } catch (e) { console.log(e); };
+      try { obj_desc3 = data[j].children[2].children[1].innerText; } catch (e) { console.log(e); };
       var id = getID(data[j]);
-      $('#hidden-detail')[0].innerHTML += '<div class="show-item" id="show-' + id + '"><button class="show-btn" type="button">Show</button><div>' + obj_desc1 + '</div><div>' + obj_desc2 + '</div><div>' + obj_desc3 + '</div></div>';
+      $('#hidden-detail')[0].innerHTML += '<div class="show-item" id="show-' + id + '" style="display:none;"><button class="show-btn" type="button">Show</button><div>' + obj_desc1 + '</div><div>' + obj_desc2 + '</div><div>' + obj_desc3 + '</div></div>';
 
       // hidden button
       tgt_element.style.position = 'relative';
@@ -205,5 +210,5 @@ function addHiddenShowBtn() {
 }
 
 window.onload = function () {
-  initWithDom();
+  init();
 };
