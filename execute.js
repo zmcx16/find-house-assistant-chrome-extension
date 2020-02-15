@@ -33,7 +33,9 @@ function init() {
       storage_data = {...stor_data["data"]};
     }
 
-    setShowHiddenUI();
+    // update UI
+    $('#filter-address-input')[0].value = storage_data['filter_address'];
+    setUI();
 
     console.log("init completed.");
   });
@@ -78,17 +80,26 @@ function initWithDom(){
       hiddenAll();
     });
 
-    // add hidden button for every target
-    addHiddenShowBtn(); // prevent observer not detect
+
+    // prevent observer not detect
+    updateUIContentChange(); 
+
+    // detect content change
     $("body").on('DOMSubtreeModified', ".object_con_box.list_con", function () {
-      addHiddenShowBtn();
+      updateUIContentChange();
+    });
+
+    // save filter address
+    $('#save-filter-address-btn').click(function () {
+      storage_data['filter_address'] = $('#filter-address-input')[0].value;
+      saveStorage();
+      setUI();
     });
 
     // reset Extend Panel
     $('.pagger_box li').click(function () {
       resetExtendPanel(); 
     });
-
     $('.pagger_box a').click(function () {
       resetExtendPanel();
     });
@@ -144,6 +155,23 @@ function setShowHiddenTargets(data_list, val) {
   }
 }
 
+function setFilterAddressUI(){
+
+  $(".title_list > .sub_tit").each((index, value) =>{
+    var filter_addr = storage_data['filter_address'];
+    var tgt_addr = value.innerText;
+    if (filter_addr){
+      var address_filter_list = filter_addr.split(';');
+      address_filter_list.forEach(function (element) {
+        if (tgt_addr.indexOf(element) !== -1) {
+          $(value).parent().parent().parent()[0].style.display = 'none';
+        }
+      });
+    }
+  });
+
+}
+
 function setShowHiddenUI() {
 
   Object.keys(storage_data['show_hidden']).forEach(function (key) {
@@ -167,10 +195,15 @@ function setShowHiddenUI() {
 
 }
 
+function setUI(){
+  setShowHiddenUI();
+  setFilterAddressUI();
+}
+
 function doShow(data) {
 
   setShowHiddenTargets(getShowHiddenIDList(data), true);
-  setShowHiddenUI();
+  setUI();
   saveStorage();
 }
 
@@ -182,7 +215,7 @@ function showAll() {
 function doHidden(data) {
 
   setShowHiddenTargets(getShowHiddenIDList(data), false);
-  setShowHiddenUI();
+  setUI();
   saveStorage();
 }
 
@@ -191,7 +224,7 @@ function hiddenAll() {
   doHidden($(".object_con_box.list_con")[0].children);
 }
 
-function addHiddenShowBtn() {
+function updateUIContentChange() {
 
   var data = $(".object_con_box.list_con")[0].children;
   for (var j = 0; j < data.length; j++) {
@@ -213,7 +246,7 @@ function addHiddenShowBtn() {
     }
   }
 
-  setShowHiddenUI();
+  setUI();
 
   $('.hidden-btn').unbind("click");
   $('.hidden-btn').click(function () {
