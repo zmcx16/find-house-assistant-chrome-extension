@@ -1,6 +1,6 @@
 const extensionID = "mkcilniegejnlgmabdcoiglhekaekfeh";
 
-var storage_data = { 'show_hidden': {}, 'filter_address': '' };
+var storage_data = { 'show_hidden': {}, 'filter_address': '', 'bookmark':{} };
 
 const clearData = (data) => {
   storage_data = { 'show_hidden': {}, 'filter_address': '' };
@@ -85,9 +85,12 @@ function initWithDom(){
     updateUIContentChange(); 
 
     // detect content change
-    $("body").on('DOMSubtreeModified', ".object_con_box.list_con", function () {
-      updateUIContentChange();
-    });
+    //$("body").on('DOMSubtreeModified', ".object_con_box.list_con", function () {
+      window.setTimeout((() => updateUIContentChange()), 3000);
+      
+    //});
+
+
 
     // save filter address
     $('#save-filter-address-btn').click(function () {
@@ -229,7 +232,7 @@ function updateUIContentChange() {
   var data = $(".object_con_box.list_con")[0].children;
   for (var j = 0; j < data.length; j++) {
     var tgt_element = data[j].children[1];
-    if (tgt_element != null && tgt_element.innerHTML.indexOf('<button class="hidden-btn"') === -1 && tgt_element.innerHTML.indexOf('title_list') != -1){
+    if (tgt_element != null && tgt_element.innerHTML.indexOf('div class="icon-text-btn"') === -1 && tgt_element.innerHTML.indexOf('title_list') != -1){
       
       // show button
       var obj_desc1, obj_desc2, obj_desc3;
@@ -241,7 +244,21 @@ function updateUIContentChange() {
 
       // hidden button
       tgt_element.style.position = 'relative';
-      tgt_element.innerHTML = '<button class="hidden-btn" id="hidden-' + id + '" type="button">隱藏</button>' + tgt_element.innerHTML;
+      tgt_element.innerHTML = 
+        '<div class="icon-text-btn star-btn" id="star-' + id + '" >' + 
+          '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">'+
+            '<path id="star-icon-' + id + '-0" d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z" style="fill: gold;"/>'+
+            '<path id="star-icon-' + id + '-1" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" style="fill: gold; display:none;"/>' + 
+          '</svg>' + 
+          '<div class="text-label">追蹤</div>' + 
+        '</div>' + 
+        '<div class="icon-text-btn hidden-btn" id="hidden-' + id + '" >' + 
+          '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24">'+
+            '<path d="M11.83,9L15,12.16C15,12.11 15,12.05 15,12A3,3 0 0,0 12,9C11.94,9 11.89,9 11.83,9M7.53,9.8L9.08,11.35C9.03,11.56 9,11.77 9,12A3,3 0 0,0 12,15C12.22,15 12.44,14.97 12.65,14.92L14.2,16.47C13.53,16.8 12.79,17 12,17A5,5 0 0,1 7,12C7,11.21 7.2,10.47 7.53,9.8M2,4.27L4.28,6.55L4.73,7C3.08,8.3 1.78,10 1,12C2.73,16.39 7,19.5 12,19.5C13.55,19.5 15.03,19.2 16.38,18.66L16.81,19.08L19.73,22L21,20.73L3.27,3M12,7A5,5 0 0,1 17,12C17,12.64 16.87,13.26 16.64,13.82L19.57,16.75C21.07,15.5 22.27,13.86 23,12C21.27,7.61 17,4.5 12,4.5C10.6,4.5 9.26,4.75 8,5.2L10.17,7.35C10.74,7.13 11.35,7 12,7Z" />'+
+          '</svg>' + 
+          '<div class="text-label">隱藏</div>' + 
+        '</div>' + 
+        tgt_element.innerHTML;
 
     }
   }
@@ -257,6 +274,12 @@ function updateUIContentChange() {
   $('.show-btn').click(function () {
     var show_item = $(this).parent()[0];
     doShow([$('#hidden-' + show_item.id.replace('show-','')).parent().parent()[0]]);
+  });
+
+  $('.star-btn').unbind("click");
+  $('.star-btn').click(function () {
+    $('#star-icon-' + $(this)[0].id.replace('star-', '') + '-0').css('display', 'none');
+    $('#star-icon-' + $(this)[0].id.replace('star-', '') + '-1').css('display', 'block');
   });
 }
 

@@ -32,6 +32,43 @@
     position: absolute;
     z-index: 10;
     right: -80px;
+    top: 70px;
+}
+
+.star-btn{
+    width: fit-content;
+    position: absolute;
+    z-index: 10;
+    right: -80px;
+    top: 30px;
+}
+
+.icon-text-btn{
+  display: -webkit-inline-box;
+  font-size: initial;
+  border: 1px solid #ccc;
+  /* margin: 0 0.5em 0.5em 0; */
+  border-radius: 3px;
+  background-image: -webkit-linear-gradient(top, #ffffff, #eeeeee);
+  padding: 1px;
+  width: 75px;
+  cursor: pointer;
+  height: 28px;
+}
+
+.icon-text-btn:hover {
+  background-image: -webkit-linear-gradient(top, #eeeeee, #ffffff); 
+  background-image:    -moz-linear-gradient(top, #eeeeee, #ffffff); 
+  background-image:     -ms-linear-gradient(top, #eeeeee, #ffffff); 
+  background-image:      -o-linear-gradient(top, #eeeeee, #ffffff); 
+  background-image:         linear-gradient(top, #eeeeee, #ffffff);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#ffffff',GradientType=0 );
+}
+
+.icon-text-btn .text-label{
+  padding-left: 5px;
+  padding-bottom: 0px;
+  font-size: small;
 }
 
 #ext-panel{
