@@ -1,9 +1,10 @@
 const extensionID = "mkcilniegejnlgmabdcoiglhekaekfeh";
-
 var storage_data = { 'show_hidden': {}, 'filter_address': '', 'bookmark':{} };
 
+var ui_loading = false;
+
 const clearData = (data) => {
-  storage_data = { 'show_hidden': {}, 'filter_address': '' };
+  storage_data = { 'show_hidden': {}, 'filter_address': '', 'bookmark': {} };
   console.log('clear');
 };
 
@@ -31,11 +32,19 @@ function init() {
     if (Object.keys(stor_data).length > 0) {
       console.log(stor_data)
       storage_data = {...stor_data["data"]};
+      if (!('show_hidden' in storage_data))
+        storage_data['show_hidden'] = {};
+
+      if (!('filter_address' in storage_data))
+        storage_data['filter_address'] = '';
+
+      if (!('bookmark' in storage_data))
+        storage_data['bookmark'] = {};
     }
 
     // update UI
     $('#filter-address-input')[0].value = storage_data['filter_address'];
-    setUI();
+    setCommonUI();
 
     console.log("init completed.");
   });
@@ -49,9 +58,11 @@ function initWithDom(){
       '  <div id="ext-panel-title">Extend Panel</div>' +
       '  <button id="show-all-btn" type="button">顯示所有</button>' +
       '  <button id="hidden-all-btn" type="button">隱藏所有</button>' +
-      '  <a href="javascript:void(0);" id="show-detail-btn">展開</a>' +
+      '  <a href="javascript:void(0);" id="show-detail-btn" class="hyper-link">展開</a>' +
       '  <span class="filter-address">去除地址關鍵字:</span><input type="text" id="filter-address-input" placeholder=" OO路;XX巷" name="filter-address-input">' +
       '  <button id="save-filter-address-btn" type="button">儲存</button>' +
+      '  <a href="javascript:void(0);" id="star-detail-btn" class="hyper-link">展開追蹤清單</a>' +
+      '  <div id="star-detail" style="display:none;"></div>' +
       '  <div id="hidden-detail" style="display:none;"></div>' +
       '</div>';
 
@@ -70,6 +81,19 @@ function initWithDom(){
       }
     });
 
+    $('#star-detail-btn').click(function () {
+      if ($(this).hasClass('active')) {
+        $(this).removeClass('active');
+        $('#star-detail').css('display', 'none');
+        $('#star-detail-btn')[0].innerText = '展開追蹤清單';
+      }
+      else {
+        $(this).addClass('active');
+        $('#star-detail').css('display', 'block');
+        $('#star-detail-btn')[0].innerText = '隱藏追蹤清單';
+      }
+    });
+
     // add show-all & hidden-all
     $('#show-all-btn').click(function () {
       showAll();
@@ -85,18 +109,23 @@ function initWithDom(){
     updateUIContentChange(); 
 
     // detect content change
-    //$("body").on('DOMSubtreeModified', ".object_con_box.list_con", function () {
-      window.setTimeout((() => updateUIContentChange()), 3000);
-      
-    //});
-
+    $("body").on('DOMSubtreeModified', ".object_con_box.list_con", function () {
+      if (ui_loading === false){
+        ui_loading = true;
+        window.setTimeout((() => {
+          console.log('aaa');
+          updateUIContentChange()
+          ui_loading = false;
+        }), 300);
+      }
+    });
 
 
     // save filter address
     $('#save-filter-address-btn').click(function () {
       storage_data['filter_address'] = $('#filter-address-input')[0].value;
       saveStorage();
-      setUI();
+      setCommonUI();
     });
 
     // reset Extend Panel
@@ -112,6 +141,7 @@ function initWithDom(){
 function resetExtendPanel(){
 
   $('#hidden-detail')[0].innerHTML = "";
+  $('#star-detail')[0].innerHTML = "";
 }
 
 // local function 
@@ -135,14 +165,18 @@ function getID(html_data){
   return null;
 }
 
-function getShowHiddenIDList(data) {
+function getIDList(data) {
 
   var output = [];
-  for (var i = 0; i < data.length; i++) {
-    console.log(data[i]);
-    var id = getID(data[i]);
-    if (id != null)
-      output.push(id);
+  try{
+    for (var i = 0; i < data.length; i++) {
+      var id = getID(data[i]);
+      if (id != null)
+        output.push(id);
+    }
+  }
+  catch (e){
+    console.log(e);
   }
 
   return output;
@@ -187,26 +221,65 @@ function setShowHiddenUI() {
       }
       else if (storage_data['show_hidden'][key].display){
         tgt_div.style.display = 'flex';
-        $('#show-' + key)[0].style.display = 'none';
+        $('#show-' + key+'-item')[0].style.display = 'none';
       }
       else{
         tgt_div.style.display = 'none';
-        $('#show-' + key)[0].style.display = 'grid';
+        $('#show-' + key+'-item')[0].style.display = 'grid';
       }
+    }
+  });
+}
+
+function setStarUI() {
+
+  var base_link = "/house/";
+  var star_list = [];
+  $('#star-detail')[0].innerHTML = "";
+  Object.keys(storage_data['bookmark']).forEach(function (key) {
+    $('#star-detail')[0].innerHTML +=
+      '<div class="star-item" id="star-' + key + '-item">' +
+        '<div class="icon-text-btn unstar-btn" id="unstar-' + key + '" >' +
+          '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">'+
+            '<path id="unstar-icon-' + key + '-1" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" style="fill: gold;"/>' + 
+          '</svg>' + 
+          '<div class="text-label" id="unstar-' + key + '-btn-txt">取消</div>' +
+        '</div>' +
+        '<a href="'+base_link + key + '" target="_blank" class="hyper-link">' + storage_data['bookmark'][key].desc1 + '</a><a href="'+base_link + key + '" target="_blank" class="hyper-link">' + storage_data['bookmark'][key].desc2 + '</a><a href="'+base_link + key + '" target="_blank" class="hyper-link">' + storage_data['bookmark'][key].desc3 + '</a>' +
+      '</div>';
+
+    star_list.push(key);
+  });
+
+  $(".star-btn").each((index, value) => {
+    console.log(value);
+    console.log($(value)[0].id);
+    var id_key = $(value)[0].id.replace('star-', '');
+    if (star_list.includes(id_key)){
+      $('#star-icon-' + id_key + '-0').css('display', 'none');
+      $('#star-icon-' + id_key + '-1').css('display', 'block');
+      $('#star-' + id_key + '-btn-txt')[0].textContent = "取消";
+    }
+    else{
+      $('#star-icon-' + id_key + '-1').css('display', 'none');
+      $('#star-icon-' + id_key + '-0').css('display', 'block');
+      $('#star-' + id_key + '-btn-txt')[0].textContent = "追蹤";
     }
   });
 
 }
 
-function setUI(){
+function setCommonUI(){
   setShowHiddenUI();
   setFilterAddressUI();
+  setStarUI();
+  $('#ext-panel').css('display', 'block');
 }
 
 function doShow(data) {
 
-  setShowHiddenTargets(getShowHiddenIDList(data), true);
-  setUI();
+  setShowHiddenTargets(getIDList(data), true);
+  setCommonUI();
   saveStorage();
 }
 
@@ -217,14 +290,41 @@ function showAll() {
 
 function doHidden(data) {
 
-  setShowHiddenTargets(getShowHiddenIDList(data), false);
-  setUI();
+  setShowHiddenTargets(getIDList(data), false);
+  setCommonUI();
   saveStorage();
 }
 
 function hiddenAll() {
 
   doHidden($(".object_con_box.list_con")[0].children);
+}
+
+function setStarTargets(data, val){
+
+  var id;
+  if (val){
+    id = getIDList(data);
+    var show_item_child = $('#show-' + id + '-item')[0].children;
+    if (!(id in storage_data['bookmark'])) {
+      storage_data['bookmark'][id] = {
+        desc1: show_item_child[1].innerText,
+        desc2: show_item_child[2].innerText,
+        desc3: show_item_child[3].innerText,
+      };
+    }
+  }
+  else{
+    id = data;
+    delete storage_data['bookmark'][id];
+  }
+}
+
+function doStar(data, val){
+
+  setStarTargets(data, val);
+  setCommonUI();
+  saveStorage();
 }
 
 function updateUIContentChange() {
@@ -240,7 +340,16 @@ function updateUIContentChange() {
       try { obj_desc2 = data[j].children[1].children[1].children[1].innerText; } catch (e) { console.log(e); };
       try { obj_desc3 = data[j].children[2].children[1].innerText; } catch (e) { console.log(e); };
       var id = getID(data[j]);
-      $('#hidden-detail')[0].innerHTML += '<div class="show-item" id="show-' + id + '" style="display:none;"><button class="show-btn" type="button">Show</button><div>' + obj_desc1 + '</div><div>' + obj_desc2 + '</div><div>' + obj_desc3 + '</div></div>';
+      $('#hidden-detail')[0].innerHTML += 
+      '<div class="show-item" id="show-' + id + '-item" style="display:none;">'+
+        '<div class="icon-text-btn show-btn" id="show-' + id + '" >' + 
+          '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24">'+
+            '<path d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" />'+
+          '</svg>' + 
+          '<div class="text-label">顯示</div>' + 
+        '</div>' + 
+        '<div>' + obj_desc1 + '</div><div>' + obj_desc2 + '</div><div>' + obj_desc3 + '</div>'+
+      '</div>';
 
       // hidden button
       tgt_element.style.position = 'relative';
@@ -248,9 +357,9 @@ function updateUIContentChange() {
         '<div class="icon-text-btn star-btn" id="star-' + id + '" >' + 
           '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">'+
             '<path id="star-icon-' + id + '-0" d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z" style="fill: gold;"/>'+
-            '<path id="star-icon-' + id + '-1" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" style="fill: gold; display:none;"/>' + 
+            '<path id="star-icon-' + id + '-1" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" style="fill: gold;"/>' + 
           '</svg>' + 
-          '<div class="text-label">追蹤</div>' + 
+          '<div class="text-label" id="star-' + id + '-btn-txt"></div>' + 
         '</div>' + 
         '<div class="icon-text-btn hidden-btn" id="hidden-' + id + '" >' + 
           '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24">'+
@@ -263,7 +372,7 @@ function updateUIContentChange() {
     }
   }
 
-  setUI();
+  setCommonUI();
 
   $('.hidden-btn').unbind("click");
   $('.hidden-btn').click(function () {
@@ -272,14 +381,26 @@ function updateUIContentChange() {
 
   $('.show-btn').unbind("click");
   $('.show-btn').click(function () {
-    var show_item = $(this).parent()[0];
-    doShow([$('#hidden-' + show_item.id.replace('show-','')).parent().parent()[0]]);
+    var show_btn = $(this)[0];
+    doShow([$('#hidden-' + show_btn.id.replace('show-','')).parent().parent()[0]]);
   });
 
   $('.star-btn').unbind("click");
   $('.star-btn').click(function () {
-    $('#star-icon-' + $(this)[0].id.replace('star-', '') + '-0').css('display', 'none');
-    $('#star-icon-' + $(this)[0].id.replace('star-', '') + '-1').css('display', 'block');
+    if ($(this).hasClass('starring')) {
+      $(this).removeClass('starring');
+      doStar([$(this).parent().parent()[0]], false);
+    }
+    else {
+      $(this).addClass('starring');
+      doStar([$(this).parent().parent()[0]], true);
+    }
+  });
+
+  $('.unstar-btn').unbind("click");
+  $('.unstar-btn').click(function () {
+    var unstar_btn = $(this)[0];
+    doStar(unstar_btn.id.replace('unstar-', ''), false);
   });
 }
 

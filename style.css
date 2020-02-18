@@ -8,13 +8,22 @@
     margin-right: 20px;
 }
 
-#show-detail-btn{
+#show-detail-btn, #star-detail-btn {
     margin-right: 100px;
+
+}
+
+.hyper-link{
     color: #003399 !important;
 }
 
 .filter-address{
     margin-right: 10px;
+}
+
+#star-detail-btn{
+    float: right;
+    margin-right: 20px;
 }
 
 #ext-panel{
@@ -23,7 +32,7 @@
     margin-bottom: 20px;
 }
 
-.show-btn{
+.show-btn, .unstar-btn{
     width: fit-content;
 }
 
@@ -44,31 +53,37 @@
 }
 
 .icon-text-btn{
-  display: -webkit-inline-box;
-  font-size: initial;
-  border: 1px solid #ccc;
-  /* margin: 0 0.5em 0.5em 0; */
-  border-radius: 3px;
-  background-image: -webkit-linear-gradient(top, #ffffff, #eeeeee);
-  padding: 1px;
-  width: 75px;
-  cursor: pointer;
-  height: 28px;
+    display: -webkit-inline-box;
+    font-size: initial;
+    border: 1px solid #ccc;
+    /* margin: 0 0.5em 0.5em 0; */
+    border-radius: 3px;
+    background-image: -webkit-linear-gradient(top, #ffffff, #eeeeee);
+    padding: 1px;
+    width: 70px;
+    cursor: pointer;
+    height: 28px;
 }
 
 .icon-text-btn:hover {
-  background-image: -webkit-linear-gradient(top, #eeeeee, #ffffff); 
-  background-image:    -moz-linear-gradient(top, #eeeeee, #ffffff); 
-  background-image:     -ms-linear-gradient(top, #eeeeee, #ffffff); 
-  background-image:      -o-linear-gradient(top, #eeeeee, #ffffff); 
-  background-image:         linear-gradient(top, #eeeeee, #ffffff);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#ffffff',GradientType=0 );
+    background-image: -webkit-linear-gradient(top, #eeeeee, #ffffff); 
+    background-image:    -moz-linear-gradient(top, #eeeeee, #ffffff); 
+    background-image:     -ms-linear-gradient(top, #eeeeee, #ffffff); 
+    background-image:      -o-linear-gradient(top, #eeeeee, #ffffff); 
+    background-image:         linear-gradient(top, #eeeeee, #ffffff);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#ffffff',GradientType=0 );
 }
 
 .icon-text-btn .text-label{
-  padding-left: 5px;
-  padding-bottom: 0px;
-  font-size: small;
+    padding-left: 5px;
+    padding-bottom: 0px;
+    font-size: small;
+    height: 20px;
+    line-height: 20px;
+}
+
+.text-label{
+    padding: 2px 0px 2px 4px;
 }
 
 #ext-panel{
@@ -76,6 +91,7 @@
     padding: 10px 10px;
     background-color: floralwhite;
     border-radius: 5px;
+    display: block;
 }
 
 #ext-panel-title{
@@ -83,15 +99,16 @@
     padding-bottom: 10px;
 }
 
-#hidden-detail{
+#hidden-detail, #star-detail{
     border: 1px groove #ddd;
     margin: 10px 0px;
     padding: 10px;
 }
 
-.show-item{
+.show-item, .star-item{
     display: grid;
-    grid-template-columns: 70px 32% 50% 15%;
+    grid-template-columns: 80px 32% 50% 15%;
     margin-bottom: 5px;
     line-height: initial;
+    align-items: center;
 }
