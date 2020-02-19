@@ -1,3 +1,41 @@
 body{
-    background: green;
+    background: white;
+    font-family: "Helvetica", "Arial","LiHei Pro","黑體-繁","微軟正黑體", sans-serif;
+    border: 1px groove #ddd;
+    background-color: floralwhite;
+    display: block;
+}
+
+span{
+	vertical-align: middle;
+}
+
+.container{
+	margin: 15px;
+}
+
+.clear-data{
+	display: inline-block;
+}
+
+#clear-data-input{
+	width: 40px;
+    margin: 0 10px;
+}
+
+#clear-data-btn{
+    margin-left: 5px;
+}
+
+.relate-links{
+    margin: 20px 0px;
+}
+
+.relate-links-title{
+    padding: 10px 0px;
+}
+
+.relate-link{
+    padding: 5px 10px;
+	display: block;
 }

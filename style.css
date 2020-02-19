@@ -1,16 +1,13 @@
-#show-all-btn{
-    color: green !important;
+#hidden-all-btn, #show-all-btn{
     margin-right: 20px;
 }
 
-#hidden-all-btn{
+#save-filter-address-btn, #hidden-all-btn, #show-all-btn{
     color: green !important;
-    margin-right: 20px;
 }
 
 #show-detail-btn, #star-detail-btn {
     margin-right: 100px;
-
 }
 
 .hyper-link{

@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns="http://www.w3.org/1999/xhtml" style="width:100px;">
+<html xmlns="http://www.w3.org/1999/xhtml" style="width:250px;">
   <head>
     <title>House Hidden</title>
     <meta charset="UTF-8">
@@ -8,7 +8,20 @@
   </head>
 
   <body id="body">
-    <button id="clear-data">Clear</button>
+	<div class="container">
+	  <div class="clear-data">
+		<span class="input-text">清除</span>
+		<input type="text" id="clear-data-input" placeholder=" 30" maxlength="6" name="clear-data-input">
+		<span class="input-text">天前資料</span>
+		<button id="clear-data-btn">清除</button>
+	  </div>
+      <div class="relate-links">
+        <div class="relate-links-title">相關連結:</div>
+        <a class="relate-link" target="_blank" href="https://github.com/zmcx16/OOXX">XXX Github</a>
+        <a class="relate-link" target="_blank" href="https://project.zmcx16.moe/">zmcx16's Side Projects</a>
+        <a class="relate-link" target="_blank" href="https://blog.zmcx16.moe/">zmcx16's Blog</a>
+      </div>
+	</div>
     <script src="./popup.js"></script>
   </body>
 </html>
