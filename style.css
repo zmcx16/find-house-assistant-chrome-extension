@@ -27,6 +27,7 @@
     width: 980px;
     margin: 0 auto;
     margin-bottom: 20px;
+    font-weight: 550;
 }
 
 .show-btn, .unstar-btn{

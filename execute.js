@@ -11,7 +11,8 @@ var text_dict = {
   save: '儲存',
   showStarList: '展開追蹤清單',
   hiddenStarList: '隱藏追蹤清單',
-  display: '顯示'
+  display: '顯示',
+  extendBoard: '擴充面板'
 };
 
 var ui_loading = false;
@@ -105,7 +106,7 @@ function initWithDom(){
   if ($("#vue-container")[0].innerHTML.indexOf("ext-panel") === -1) {
     var ext_panel = 
     '<div id="ext-panel">' +
-      '  <div id="ext-panel-title">Extend Panel</div>' +
+      '  <div id="ext-panel-title">' + text_dict.extendBoard + '</div>' +
       '  <button id="show-all-btn" type="button">' + text_dict.showAll + '</button>' +
       '  <button id="hidden-all-btn" type="button">' + text_dict.hiddenAll + '</button>' +
       '  <a href="javascript:void(0);" id="show-detail-btn" class="hyper-link">' + text_dict.show + '</a>' +
