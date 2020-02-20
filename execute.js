@@ -78,16 +78,7 @@ function init() {
       if (!('bookmark' in storage_data))
         storage_data['bookmark'] = {};
 
-      //remove redundant data
-      var del_show_hidden_id_list = [];
-      Object.keys(storage_data['show_hidden']).forEach(function (key) {
-        if (storage_data['show_hidden'][key].display) {
-          del_show_hidden_id_list.push(key);
-        }
-      });
-      for (var i = 0; i < del_show_hidden_id_list.length; i++) {
-        delete storage_data['show_hidden'][del_show_hidden_id_list[i]];
-      }
+      removeShowHiddenRedundantData();
 
       console.log(storage_data);
     }
@@ -181,19 +172,35 @@ function initWithDom(){
     });
 
     // reset Extend Panel
-    $('.pagger_box li').click(function () {
-      resetExtendPanel(); 
+    $('li').click(function () {
+      if ($(this).parent()[0].className == "page_wrap")
+        resetExtendPanel(); 
     });
-    $('.pagger_box a').click(function () {
-      resetExtendPanel();
+    $('a').click(function () {
+      if ($(this).parent()[0].className == "pagger_box")
+        resetExtendPanel(); 
     });
   }
 }
 
 function resetExtendPanel(){
 
+  removeShowHiddenRedundantData();
   $('#hidden-detail')[0].innerHTML = "";
   $('#star-detail')[0].innerHTML = "";
+}
+
+function removeShowHiddenRedundantData(){
+
+  var del_show_hidden_id_list = [];
+  Object.keys(storage_data['show_hidden']).forEach(function (key) {
+    if (storage_data['show_hidden'][key].display) {
+      del_show_hidden_id_list.push(key);
+    }
+  });
+  for (var i = 0; i < del_show_hidden_id_list.length; i++) {
+    delete storage_data['show_hidden'][del_show_hidden_id_list[i]];
+  }
 }
 
 // local function 
@@ -269,7 +276,7 @@ function setShowHiddenUI() {
     var tgt_obj = $('a[href$="' + tgt_url + '"]');
     if (tgt_obj){
       var tgt_div = tgt_obj.parent().parent().parent()[0];
-      if (!tgt_div || !tgt_div || !$('#show-' + key)[0]){
+      if (!tgt_div || !$('#show-' + key)[0]){
         // do nothing
       }
       else if (storage_data['show_hidden'][key].display){
@@ -398,6 +405,7 @@ function doStar(data, val, isHtml){
 
 function updateUIContentChange() {
 
+  $('#hidden-detail')[0].innerHTML = "";
   var data = $(".object_con_box.list_con")[0].children;
   for (var j = 0; j < data.length; j++) {
     var tgt_element = data[j].children[1];
@@ -420,7 +428,7 @@ function updateUIContentChange() {
         '<div>' + obj_desc1 + '</div><div>' + obj_desc2 + '</div><div>' + obj_desc3 + '</div>'+
       '</div>';
 
-      // hidden button
+      // hidden & star button
       tgt_element.style.position = 'relative';
       tgt_element.innerHTML = 
         '<div class="icon-text-btn star-btn" id="star-' + id + '" >' + 
@@ -469,5 +477,8 @@ function updateUIContentChange() {
 }
 
 window.onload = function () {
-  init();
+
+  window.setTimeout((() => {
+    init();
+  }), 1000);
 };
