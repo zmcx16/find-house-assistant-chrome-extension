@@ -17,8 +17,22 @@ var text_dict = {
 
 var ui_loading = false;
 
-function clearStorageData(dict_key, clear_time_length){
-  
+// popup message
+const onMessage = (message) => {
+  switch (message.action) {
+    case 'CLEAR':
+      clearData(message.data);
+      break;
+    default:
+      break;
+  }
+}
+
+chrome.runtime.onMessage.addListener(onMessage);
+chrome.runtime.sendMessage({ "message": "activate_icon" });
+
+function clearStorageData(dict_key, clear_time_length) {
+
   var del_list = [];
   var now = Math.floor(new Date().getTime() / 1000);
 
@@ -34,33 +48,27 @@ function clearStorageData(dict_key, clear_time_length){
 }
 
 const clearData = (data) => {
-  
+
   var clear_time_length = data.days * 86400;
   clearStorageData('show_hidden', clear_time_length);
   clearStorageData('bookmark', clear_time_length);
 
-  saveStorage(function() {
+  saveStorage(function () {
     console.log('do clear');
     location.reload();
   });
-  
+
 };
 
-const onMessage = (message) => {
-  switch (message.action) {
-    case 'CLEAR':
-      clearData(message.data);
-      break;
-    default:
-      break;
-  }
-}
-
-chrome.runtime.onMessage.addListener(onMessage);
-
-chrome.runtime.sendMessage({ "message": "activate_icon" });
+// Dom event
+window.onload = function () {
+  window.setTimeout((() => {
+    init();
+  }), 1000);
+};
 
 
+// local function 
 function init() {
 
   chrome.storage.local.get("data", function (stor_data) {
@@ -203,7 +211,6 @@ function removeShowHiddenRedundantData(){
   }
 }
 
-// local function 
 function saveStorage(callback) {
 
   chrome.storage.local.set({ "data": storage_data }, function () {
@@ -475,10 +482,3 @@ function updateUIContentChange() {
     }
   });
 }
-
-window.onload = function () {
-
-  window.setTimeout((() => {
-    init();
-  }), 1000);
-};
