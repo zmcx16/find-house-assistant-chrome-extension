@@ -12,5 +12,7 @@
 
 # Demo
 
+![image](https://github.com/zmcx16/find-house-assistant-chrome-extension/blob/master/demo/demo.gif)
+
 # License
 This project is licensed under the terms of the MIT license.
