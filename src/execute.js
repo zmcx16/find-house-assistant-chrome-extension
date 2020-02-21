@@ -420,26 +420,11 @@ function updateUIContentChange() {
   var data = $(".object_con_box.list_con")[0].children;
   for (var j = 0; j < data.length; j++) {
     var tgt_element = data[j].children[1];
+    var id = getID(data[j]);
+
+    // hidden & star button
     if (tgt_element != null && tgt_element.innerHTML.indexOf('icon-text-btn') === -1 && tgt_element.innerHTML.indexOf('title_list') != -1) {
 
-      // show button
-      var obj_desc1, obj_desc2, obj_desc3;
-      try { obj_desc1 = data[j].children[1].children[0].children[0].innerText; } catch (e) { console.log(e); };
-      try { obj_desc2 = data[j].children[1].children[1].children[1].innerText; } catch (e) { console.log(e); };
-      try { obj_desc3 = data[j].children[2].children[1].innerText; } catch (e) { console.log(e); };
-      var id = getID(data[j]);
-      $('#hidden-detail')[0].innerHTML +=
-        '<div class="show-item" id="show-' + id + '-item" style="display:none;">' +
-        '<div class="icon-text-btn show-btn" id="show-' + id + '" >' +
-        '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24">' +
-        '<path d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" />' +
-        '</svg>' +
-        '<div class="text-label">' + text_dict.display + '</div>' +
-        '</div>' +
-        '<div>' + obj_desc1 + '</div><div>' + obj_desc2 + '</div><div>' + obj_desc3 + '</div>' +
-        '</div>';
-
-      // hidden & star button
       tgt_element.style.position = 'relative';
       tgt_element.innerHTML =
         '<div class="icon-text-btn star-btn" id="star-' + id + '" >' +
@@ -456,8 +441,25 @@ function updateUIContentChange() {
         '<div class="text-label">' + text_dict.hidden + '</div>' +
         '</div>' +
         tgt_element.innerHTML;
-
     }
+
+    // show button
+    var obj_desc1, obj_desc2, obj_desc3;
+    try { obj_desc1 = data[j].children[1].children[2].children[0].innerText; } catch (e) { console.log(e); };
+    try { obj_desc2 = data[j].children[1].children[2].children[1].innerText; } catch (e) { console.log(e); };
+    try { obj_desc3 = data[j].children[2].children[1].innerText; } catch (e) { console.log(e); };
+
+    $('#hidden-detail')[0].innerHTML +=
+      '<div class="show-item" id="show-' + id + '-item" style="display:none;">' +
+      ' <div class="icon-text-btn show-btn" id="show-' + id + '" >' +
+      '   <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24">' +
+      '     <path d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" />' +
+      '   </svg>' +
+      '   <div class="text-label">' + text_dict.display + '</div>' +
+      ' </div>' +
+      ' <div>' + obj_desc1 + '</div><div>' + obj_desc2 + '</div><div>' + obj_desc3 + '</div>' +
+      '</div>';
+
   }
 
   setCommonUI();
