@@ -228,7 +228,7 @@ function getID(html_data) {
   var match_url = html_data.outerHTML.match(urlRegex);
   if (match_url) {
     var id = match_url[1].substring(match_url[1].lastIndexOf("\/") + 1);
-    if (id !== null){
+    if (id !== null && id !== undefined){
       return id;
     }
   }
@@ -242,7 +242,7 @@ function getIDList(data) {
   try {
     for (var i = 0; i < data.length; i++) {
       var id = getID(data[i]);
-      if (id !== null){
+      if (id !== null && id !== undefined){
         output.push(id);
       }
     }
@@ -424,7 +424,7 @@ function updateUIContentChange() {
     var id = getID(data[j]);
 
     // hidden & star button
-    if (tgt_element !== null && tgt_element.innerHTML.indexOf('icon-text-btn') === -1 && tgt_element.innerHTML.indexOf('title_list') != -1) {
+    if (tgt_element !== null && tgt_element !== undefined && tgt_element.innerHTML.indexOf('icon-text-btn') === -1 && tgt_element.innerHTML.indexOf('title_list') != -1) {
 
       tgt_element.style.position = 'relative';
       tgt_element.innerHTML =
