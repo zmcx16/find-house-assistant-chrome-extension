@@ -35,14 +35,14 @@ function clearStorageData(dict_key, clear_time_length) {
   var del_list = [];
   var now = Math.floor(new Date().getTime() / 1000);
 
-  Object.keys(storage_data[`${dict_key}`]).forEach(function (key) {
-    if (now - storage_data[`${dict_key}`][key].last_time > clear_time_length) {
+  Object.keys(storage_data[dict_key]).forEach(function (key) {
+    if (now - storage_data[dict_key][key].last_time > clear_time_length) {
       del_list.push(key);
     }
   });
 
   for (var i = 0; i < del_list.length; i++) {
-    delete storage_data[`${dict_key}`][`${del_list[i]}`];
+    delete storage_data[dict_key][del_list[i]];
   }
 }
 
@@ -164,7 +164,7 @@ function initWithDom() {
       if (ui_loading === false) {
         ui_loading = true;
         window.setTimeout((() => {
-          updateUIContentChange()
+          updateUIContentChange();
           ui_loading = false;
         }), 300);
       }
@@ -182,12 +182,12 @@ function initWithDom() {
 
     // reset Extend Panel
     $('li').click(function () {
-      if ($(this).parent()[0].className == "page_wrap"){
+      if ($(this).parent()[0].className === "page_wrap"){
         resetExtendPanel();
       }
     });
     $('a').click(function () {
-      if ($(this).parent()[0].className == "pagger_box"){
+      if ($(this).parent()[0].className === "pagger_box"){
         resetExtendPanel();
       }
     });
@@ -228,8 +228,9 @@ function getID(html_data) {
   var match_url = html_data.outerHTML.match(urlRegex);
   if (match_url) {
     var id = match_url[1].substring(match_url[1].lastIndexOf("\/") + 1);
-    if (id != null)
+    if (id !== null){
       return id;
+    }
   }
 
   return null;
@@ -241,7 +242,7 @@ function getIDList(data) {
   try {
     for (var i = 0; i < data.length; i++) {
       var id = getID(data[i]);
-      if (id != null){
+      if (id !== null){
         output.push(id);
       }
     }
@@ -423,7 +424,7 @@ function updateUIContentChange() {
     var id = getID(data[j]);
 
     // hidden & star button
-    if (tgt_element != null && tgt_element.innerHTML.indexOf('icon-text-btn') === -1 && tgt_element.innerHTML.indexOf('title_list') != -1) {
+    if (tgt_element !== null && tgt_element.innerHTML.indexOf('icon-text-btn') === -1 && tgt_element.innerHTML.indexOf('title_list') != -1) {
 
       tgt_element.style.position = 'relative';
       tgt_element.innerHTML =
@@ -445,9 +446,9 @@ function updateUIContentChange() {
 
     // show button
     var obj_desc1, obj_desc2, obj_desc3;
-    try { obj_desc1 = data[j].children[1].children[2].children[0].innerText; } catch (e) { console.log(e); };
-    try { obj_desc2 = data[j].children[1].children[2].children[1].innerText; } catch (e) { console.log(e); };
-    try { obj_desc3 = data[j].children[2].children[1].innerText; } catch (e) { console.log(e); };
+    try { obj_desc1 = data[j].children[1].children[2].children[0].innerText; } catch (e) { console.log(e); }
+    try { obj_desc2 = data[j].children[1].children[2].children[1].innerText; } catch (e) { console.log(e); }
+    try { obj_desc3 = data[j].children[2].children[1].innerText; } catch (e) { console.log(e); }
 
     $('#hidden-detail')[0].innerHTML +=
       '<div class="show-item" id="show-' + id + '-item" style="display:none;">' +
@@ -478,7 +479,7 @@ function updateUIContentChange() {
   $('.star-btn').unbind("click");
   $('.star-btn').click(function () {
     var id_key = $(this)[0].id.replace('star-', '');
-    if ($('#star-' + id_key + '-btn-txt')[0].textContent == text_dict.cancelStar) {
+    if ($('#star-' + id_key + '-btn-txt')[0].textContent === text_dict.cancelStar) {
       $('#star-' + id_key + '-btn-txt')[0].textContent = text_dict.addStar;
       doStar([$(this).parent().parent()[0]], false, true);
     }
