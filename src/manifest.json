@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "在台灣買房子是不是搞錯了什麼",
   "description": "房屋網站擴充插件",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "icons": {
     "16": "icon.png",
     "48": "icon.png",
