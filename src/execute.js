@@ -169,7 +169,15 @@ function initWithDom() {
         }), 300);
       }
     });
-
+	$("body").on('DOMSubtreeModified', ".page_tab_detail.pull_left", function () {
+      if (ui_loading === false) {
+        ui_loading = true;
+        window.setTimeout((() => {
+          updateUIContentChange();
+          ui_loading = false;
+        }), 300);
+      }
+    });
 
     // save filter address
     $('#save-filter-address-btn').click(function () {
