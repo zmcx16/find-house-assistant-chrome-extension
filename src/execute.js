@@ -295,7 +295,8 @@ function setShowHiddenUI() {
     var tgt_url = "https://buy.houseprice.tw/house/" + key;
     var tgt_obj = $('a[href$="' + tgt_url + '"]');
     if (tgt_obj) {
-      var tgt_div = tgt_obj.parent().parent().parent()[0];
+      //var tgt_div = tgt_obj.parent().parent().parent()[0];
+	  var tgt_div = tgt_obj.parent().parent()[0];
       if (!tgt_div || !$('#show-' + key)[0]) {
         // do nothing
       }
