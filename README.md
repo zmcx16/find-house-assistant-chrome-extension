@@ -2,6 +2,8 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/38e79f83d9e042e695a4dbda2ce0cc78)](https://app.codacy.com/manual/zmcx16/find-house-assistant-chrome-extension?utm_source=github.com&utm_medium=referral&utm_content=zmcx16/find-house-assistant-chrome-extension&utm_campaign=Badge_Grade_Settings)
 
+![image](https://github.com/zmcx16/find-house-assistant-chrome-extension/blob/master/demo/Kanban.png)
+
 # 功能
   * 支援 隱藏 / 顯示 房屋物件
   * 支援過濾地址關鍵字
